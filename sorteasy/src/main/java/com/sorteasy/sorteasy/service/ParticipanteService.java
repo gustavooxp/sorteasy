@@ -12,6 +12,7 @@ import com.sorteasy.sorteasy.dto.SorteioDTO;
 import com.sorteasy.sorteasy.entity.Participante;
 import com.sorteasy.sorteasy.entity.Sorteio;
 import com.sorteasy.sorteasy.repository.ParticipanteRepository;
+import com.sorteasy.sorteasy.repository.SorteioRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -19,6 +20,9 @@ import jakarta.transaction.Transactional;
 public class ParticipanteService {
     @Autowired
     ParticipanteRepository repository;
+
+    @Autowired
+    SorteioRepository sorteioRepository;
 
     // metodo para converter um participante para DTO
     public ParticipanteDTO toDto(Participante participante) {
@@ -43,8 +47,14 @@ public class ParticipanteService {
     
     // listar participantes de um sorteio especifico 
     public List<ParticipanteDTO> listaParticipantesPorSorteio(Long sorteioId) {
-        List<Participante> participantes = repository.listarParticipantesPorSorteio(sorteioId);
-        return participantes.stream().map(this::toDto).toList();
+        Sorteio sorteio = sorteioRepository.findById(sorteioId).orElseThrow();
+        List<Participante> participantes = sorteio.getListaParticipantes();
+
+        List<ParticipanteDTO> participantesDto = new ArrayList<>();
+        for(Participante participante : participantes) {
+            participantesDto.add(toDto(participante));
+        }
+        return participantesDto;
     }
 
     // exibir historico de vencedores

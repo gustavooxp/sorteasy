@@ -28,8 +28,8 @@ public class ParticipanteController {
 
     // listar todos os participantes de um sorteio
     @GetMapping("/sorteio/{id}")
-    public List<ParticipanteDTO> getBySorteio(@PathVariable("id") Long sorteioId) {
-        return service.listaParticipantesPorSorteio(sorteioId);
+    public List<ParticipanteDTO> getBySorteio(@PathVariable Long id) {
+        return service.listaParticipantesPorSorteio(id);
     }
 
     // listar todos os vencedores

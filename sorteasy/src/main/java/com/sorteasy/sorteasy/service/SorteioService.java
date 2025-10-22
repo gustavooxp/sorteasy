@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sorteasy.sorteasy.dto.ParticipanteDTO;
 import com.sorteasy.sorteasy.dto.SorteioDTO;
 import com.sorteasy.sorteasy.entity.Participante;
 import com.sorteasy.sorteasy.entity.Sorteio;
@@ -16,6 +17,9 @@ import com.sorteasy.sorteasy.repository.SorteioRepository;
 public class SorteioService {
     @Autowired
     SorteioRepository repository;
+
+    @Autowired
+    ParticipanteService service;
 
     // método para converter um sorteio para DTO
     public SorteioDTO toDto (Sorteio sorteio) {
@@ -55,18 +59,24 @@ public class SorteioService {
 
 
     // metodo para realizar o sorteio e definir o vencedor aleatoriamente
-    public SorteioDTO realizarSorteio(Long id) {
+    public ParticipanteDTO realizarSorteio(Long id) {
         Sorteio sorteio = repository.findById(id).orElseThrow();
         
         List<Participante> participantes = sorteio.getListaParticipantes();
+
+        if(participantes.size() > 2) {
+            throw new IllegalArgumentException("O sorteio deve ter mais de 2 inscritos");
+        }
       
-        int indiceSorteado = (int) (Math.random() * participantes.size());
-        sorteio.setGanhador(participantes.get(indiceSorteado));
+        int sorteado = (int) (Math.random() * participantes.size());
+        Participante ganhador = participantes.get(sorteado);
+
+        sorteio.setGanhador(ganhador);
         sorteio.setFinalizado(true);
         
         repository.save(sorteio);
 
-        return toDto(sorteio);
+        return service.toDto(ganhador);
     }
 
     // metodo para listar sorteios que ainda nao foram finalizados

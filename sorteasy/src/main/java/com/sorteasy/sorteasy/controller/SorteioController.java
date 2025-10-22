@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sorteasy.sorteasy.dto.ParticipanteDTO;
 import com.sorteasy.sorteasy.dto.SorteioDTO;
 import com.sorteasy.sorteasy.service.SorteioService;
 
@@ -35,13 +36,13 @@ public class SorteioController {
 
     // excluir um sorteio
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable("id") Long id) {
+    public void deleteById(@PathVariable Long id) {
         service.deleteById(id);
     }
 
     // realizar o sorteio e definir o ganhador aleatoriamente
     @GetMapping("/{id}")
-    public SorteioDTO realizarSorteio(@PathVariable("id") Long id) {
+    public ParticipanteDTO realizarSorteio(@PathVariable Long id) {
         return service.realizarSorteio(id);
     }
 
