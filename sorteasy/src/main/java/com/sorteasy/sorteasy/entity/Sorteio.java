@@ -45,7 +45,7 @@ public class Sorteio {
     private Boolean finalizado = false; 
     
     @ManyToOne
-    @JoinColumn(name = "participante_id", nullable = false)
+    @JoinColumn(name = "participante_id")
     private Participante ganhador;
 
     @OneToMany(mappedBy = "sorteio")

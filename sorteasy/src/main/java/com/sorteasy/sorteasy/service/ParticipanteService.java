@@ -49,12 +49,17 @@ public class ParticipanteService {
     public List<ParticipanteDTO> listaParticipantesPorSorteio(Long sorteioId) {
         Sorteio sorteio = sorteioRepository.findById(sorteioId).orElseThrow();
         List<Participante> participantes = sorteio.getListaParticipantes();
-
+        System.out.println(participantes.size());
         List<ParticipanteDTO> participantesDto = new ArrayList<>();
         for(Participante participante : participantes) {
             participantesDto.add(toDto(participante));
         }
         return participantesDto;
+    }
+
+    // metodo para deletar um sorteio
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 
     // exibir historico de vencedores

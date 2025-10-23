@@ -2,6 +2,7 @@ package com.sorteasy.sorteasy.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,18 +63,18 @@ public class SorteioService {
     public ParticipanteDTO realizarSorteio(Long id) {
         Sorteio sorteio = repository.findById(id).orElseThrow();
         
-        List<Participante> participantes = sorteio.getListaParticipantes();
+        List<Participante> participantes = repository.getParticipantes(id);
 
-        if(participantes.size() > 2) {
+        if(participantes.size() < 2) {
             throw new IllegalArgumentException("O sorteio deve ter mais de 2 inscritos");
         }
       
-        int sorteado = (int) (Math.random() * participantes.size());
-        Participante ganhador = participantes.get(sorteado);
+        Random random = new Random();
+        int ganhadorIndex = random.nextInt(participantes.size());
+        Participante ganhador = participantes.get(ganhadorIndex);
 
-        sorteio.setGanhador(ganhador);
         sorteio.setFinalizado(true);
-        
+        sorteio.setGanhador(ganhador);
         repository.save(sorteio);
 
         return service.toDto(ganhador);
@@ -88,7 +89,5 @@ public class SorteioService {
         }
         return sorteiosDtos;
     }
-
-
 
 }

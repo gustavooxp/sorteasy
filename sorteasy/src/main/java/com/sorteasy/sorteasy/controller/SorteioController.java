@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sorteasy.sorteasy.dto.ParticipanteDTO;
 import com.sorteasy.sorteasy.dto.SorteioDTO;
+import com.sorteasy.sorteasy.service.ParticipanteService;
 import com.sorteasy.sorteasy.service.SorteioService;
 
 import jakarta.validation.Valid;
@@ -21,6 +22,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/v1/sorteios")
 public class SorteioController {
     @Autowired SorteioService service;
+
+    @Autowired ParticipanteService participanteService;
 
     // listar todos os sorteios
     @GetMapping
@@ -41,9 +44,10 @@ public class SorteioController {
     }
 
     // realizar o sorteio e definir o ganhador aleatoriamente
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/realizar")
     public ParticipanteDTO realizarSorteio(@PathVariable Long id) {
-        return service.realizarSorteio(id);
+        ParticipanteDTO participante = service.realizarSorteio(id);
+        return participante;
     }
 
     // listar sorteios que ainda nao foram finalizados
@@ -51,5 +55,6 @@ public class SorteioController {
     public List<SorteioDTO> findAllAtivos() {
         return service.findAllAtivos();
     }
+
 
 }

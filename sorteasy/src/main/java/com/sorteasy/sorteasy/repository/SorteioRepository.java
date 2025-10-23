@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.sorteasy.sorteasy.entity.Participante;
 import com.sorteasy.sorteasy.entity.Sorteio;
 
 @Repository
@@ -16,7 +17,8 @@ public interface SorteioRepository extends JpaRepository<Sorteio, Long> {
     @Query("SELECT s FROM Sorteio s WHERE s.finalizado = false")
     List<Sorteio> findAllAtivos();
 
-
+    @Query("SELECT p FROM Participante p WHERE p.sorteio.id = :sorteioId")
+    List<Participante> getParticipantes(Long sorteioId);
 
     
 

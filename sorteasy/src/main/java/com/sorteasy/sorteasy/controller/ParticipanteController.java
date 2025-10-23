@@ -3,6 +3,7 @@ package com.sorteasy.sorteasy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/participantes")
 public class ParticipanteController {
-    @Autowired ParticipanteService service;
+    @Autowired 
+    ParticipanteService service;
 
     // inscrever um participante em um sorteio 
     @PostMapping
@@ -27,7 +29,7 @@ public class ParticipanteController {
     }
 
     // listar todos os participantes de um sorteio
-    @GetMapping("/sorteio/{id}")
+    @GetMapping("/sorteios/{id}")
     public List<ParticipanteDTO> getBySorteio(@PathVariable Long id) {
         return service.listaParticipantesPorSorteio(id);
     }
@@ -36,6 +38,12 @@ public class ParticipanteController {
     @GetMapping("/vencedores")
     public List<ParticipanteDTO> getWinners() {
         return service.findAllWinners();
+    }
+
+    // remover participante por id
+    @DeleteMapping("/{id}/remover")
+    public void deleteById(@PathVariable Long id) {
+        service.deleteById(id);
     }
 
 }
